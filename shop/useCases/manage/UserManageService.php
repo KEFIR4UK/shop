@@ -44,7 +44,7 @@ class UserManageService
         $this->transaction->wrap(function () use ($user, $form) {
             $this->repository->save($user);
             $this->roles->assign($user->id, $form->role);
-            $this->newsletter->subscribe($user->email);
+//            $this->newsletter->subscribe($user->email);
         });
         return $user;
     }

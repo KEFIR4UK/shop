@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use frontend\widgets\Blog\LastPostsWidget;
+use frontend\widgets\HomePage\SliderWidget;
 use frontend\widgets\Shop\FeaturedProductsWidget;
 
 \frontend\assets\OwlCarouselAsset::register($this);
@@ -13,18 +14,7 @@ use frontend\widgets\Shop\FeaturedProductsWidget;
 
 <div class="row">
     <div id="content" class="col-sm-12">
-        <div id="slideshow0" class="owl-carousel" style="opacity: 1;">
-            <div class="item">
-                <a href="#"><img
-                            src="http://static.shop.dev/origin/11140x380.jpg"
-                            alt="" class="img-responsive"/></a>
-            </div>
-            <div class="item">
-                <a href="#"><img
-                            src="http://static.shop.dev/origin/beauty-1140x380.png"
-                            alt="" class="img-responsive"/></a>
-            </div>
-        </div>
+        <?= SliderWidget::widget()?>
         <h3>Новинки</h3>
 
         <?= FeaturedProductsWidget::widget([

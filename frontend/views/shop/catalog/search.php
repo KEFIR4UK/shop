@@ -7,7 +7,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = 'Search';
+$this->title = 'Пошук';
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -21,12 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-md-4">
                 <?= $form->field($searchForm, 'text')->textInput() ?>
-            </div>
-            <div class="col-md-4">
-                <?= $form->field($searchForm, 'category')->dropDownList($searchForm->categoriesList(), ['prompt' => '']) ?>
-            </div>
-            <div class="col-md-4">
-                <?= $form->field($searchForm, 'brand')->dropDownList($searchForm->brandsList(), ['prompt' => '']) ?>
             </div>
         </div>
 
@@ -52,10 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="row">
             <div class="col-md-6">
-                <?= Html::submitButton('Search', ['class' => 'btn btn-primary btn-lg btn-block']) ?>
+                <?= Html::submitButton('Пошук', ['class' => 'btn btn-primary btn-lg btn-block']) ?>
             </div>
             <div class="col-md-6">
-                <?= Html::a('Clear', [''], ['class' => 'btn btn-default btn-lg btn-block']) ?>
+                <?= Html::a('Очистити', [''], ['class' => 'btn btn-default btn-lg btn-block']) ?>
             </div>
         </div>
 

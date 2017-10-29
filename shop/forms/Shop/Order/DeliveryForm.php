@@ -3,7 +3,6 @@
 namespace shop\forms\Shop\Order;
 
 use shop\entities\Shop\DeliveryMethod;
-use shop\helpers\PriceHelper;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
@@ -25,7 +24,7 @@ class DeliveryForm extends Model
     {
         return [
             [['method'], 'integer'],
-            [['index', 'address'], 'required'],
+            [['address'], 'required'],
             [['index'], 'string', 'max' => 255],
             [['address'], 'string'],
         ];
@@ -35,9 +34,7 @@ class DeliveryForm extends Model
     {
         $methods = DeliveryMethod::find()->availableForWeight($this->_weight)->orderBy('sort')->all();
 
-        return ArrayHelper::map($methods, 'id', function (DeliveryMethod $method) {
-            return $method->name . ' (' . PriceHelper::format($method->cost) . ')';
-        });
+        return ArrayHelper::map($methods, 'id', 'name');
     }
 
     public function attributeLabels()

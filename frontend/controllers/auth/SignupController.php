@@ -1,6 +1,8 @@
 <?php
+
 namespace frontend\controllers\auth;
 
+use common\eventHandlers\user\signup\SignUpUserEmailHandler;
 use shop\useCases\auth\SignupService;
 use Yii;
 use yii\web\Controller;
@@ -44,6 +46,10 @@ class SignupController extends Controller
         $form = new SignupForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
+                $this->service->on(
+                    SignupService::EVENT_SignUP,
+                    [\Yii::$container->get(SignUpUserEmailHandler::class), 'handle']
+                );
                 $this->service->signup($form);
                 Yii::$app->session->setFlash('success', 'Перевірте вашу пошту для подальших інструкцій');
                 return $this->goHome();

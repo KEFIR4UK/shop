@@ -2,6 +2,7 @@
 
 namespace shop\forms\Shop\Order;
 
+use shop\forms\auth\SignupForm;
 use yii\base\Model;
 
 class CustomerForm extends Model
@@ -13,6 +14,7 @@ class CustomerForm extends Model
     {
         return [
             [['phone', 'name'], 'required'],
+            ['phone', 'match', 'pattern' => SignupForm::PHONE_PATTERN],
             [['phone', 'name'], 'string', 'max' => 255],
         ];
     }

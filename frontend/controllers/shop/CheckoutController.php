@@ -2,6 +2,7 @@
 
 namespace frontend\controllers\shop;
 
+use common\eventHandlers\order\create\OrderCreateEmailHandler;
 use shop\cart\Cart;
 use shop\forms\Shop\Order\OrderForm;
 use shop\useCases\Shop\OrderService;
@@ -47,6 +48,10 @@ class CheckoutController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
+                $this->service->on(
+                    OrderService::ORDER_CREATE,
+                    [Yii::$container->get(OrderCreateEmailHandler::class), 'handle']
+                );
                 $order = $this->service->checkout(Yii::$app->user->id, $form);
                 return $this->redirect(['/cabinet/order/view', 'id' => $order->id]);
             } catch (\DomainException $e) {

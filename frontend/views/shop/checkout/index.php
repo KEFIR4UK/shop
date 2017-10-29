@@ -72,7 +72,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading">Доставка</div>
         <div class="panel-body">
             <?= $form->field($model->delivery, 'method')->dropDownList($model->delivery->deliveryMethodsList(), ['prompt' => '--- Вибрати ---']) ?>
-            <?= $form->field($model->delivery, 'index')->textInput() ?>
             <?= $form->field($model->delivery, 'address')->textarea(['rows' => 3]) ?>
         </div>
     </div>

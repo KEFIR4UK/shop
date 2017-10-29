@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers\auth;
 
+use common\eventHandlers\user\resetPassword\PasswordResetUserEmailHandler;
 use shop\useCases\auth\PasswordResetService;
 use Yii;
 use yii\web\BadRequestHttpException;
@@ -28,6 +29,10 @@ class ResetController extends Controller
         $form = new PasswordResetRequestForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
+                $this->service->on(
+                    PasswordResetService::EVENT_PasswordReset,
+                    [\Yii::$container->get(PasswordResetUserEmailHandler::class), 'handle']
+                );
                 $this->service->request($form);
                 Yii::$app->session->setFlash('success', 'Перевірте вашу пошту для подальших інструкцій');
                 return $this->goHome();

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'email') ?>
 
-                <?= $form->field($model, 'phone', ['addon' => ['prepend' => ['content'=>'+']]]) ?>
+                <?= $form->field($model, 'phone', ['addon' => ['prepend' => ['content'=>'+38']]]) ?>
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
 

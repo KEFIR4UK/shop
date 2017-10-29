@@ -17,7 +17,6 @@ class DeliveryMethodForm extends Model
     {
         if ($method) {
             $this->name = $method->name;
-            $this->cost = $method->cost;
             $this->minWeight = $method->min_weight;
             $this->maxWeight = $method->max_weight;
             $this->sort = $method->sort;
@@ -30,7 +29,7 @@ class DeliveryMethodForm extends Model
     public function rules(): array
     {
         return [
-            [['name', 'cost', 'sort'], 'required'],
+            [['name', 'sort'], 'required'],
             [['name'], 'string', 'max' => 255],
             [['cost', 'minWeight', 'maxWeight', 'sort'], 'integer'],
         ];

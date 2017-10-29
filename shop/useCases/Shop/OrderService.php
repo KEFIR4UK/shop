@@ -14,9 +14,11 @@ use shop\repositories\Shop\OrderRepository;
 use shop\repositories\Shop\ProductRepository;
 use shop\repositories\UserRepository;
 use shop\services\TransactionManager;
+use yii\base\Component;
 
-class OrderService
+class OrderService extends Component
 {
+    const ORDER_CREATE = 'orderCreate';
     private $cart;
     private $orders;
     private $products;
@@ -30,15 +32,16 @@ class OrderService
         ProductRepository $products,
         UserRepository $users,
         DeliveryMethodRepository $deliveryMethods,
-        TransactionManager $transaction
-    )
-    {
+        TransactionManager $transaction,
+        array $config = []
+    ) {
         $this->cart = $cart;
         $this->orders = $orders;
         $this->products = $products;
         $this->users = $users;
         $this->deliveryMethods = $deliveryMethods;
         $this->transaction = $transaction;
+        parent::__construct($config);
     }
 
     public function checkout($userId, OrderForm $form): Order
@@ -84,6 +87,7 @@ class OrderService
                 $this->products->save($product);
             }
             $this->cart->clear();
+            $this->trigger(self::ORDER_CREATE);
         });
 
         return $order;

@@ -1,5 +1,6 @@
 <?php
 return [
+    'name' => 'Estel',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'bootstrap' => [
         'queue',

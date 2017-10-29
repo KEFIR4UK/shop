@@ -14,6 +14,8 @@ class SignupForm extends Model
     public $phone;
     public $password;
 
+    const PHONE_PATTERN  = '/^0\d{9,9}$/';
+
     /**
      * @inheritdoc
      */
@@ -22,20 +24,21 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => User::class],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::class],
+            ['phone', 'unique', 'targetClass' => User::class],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
             ['phone', 'required'],
-            ['phone', 'integer'],
+            ['phone', 'match', 'pattern' => self::PHONE_PATTERN],
         ];
     }
 

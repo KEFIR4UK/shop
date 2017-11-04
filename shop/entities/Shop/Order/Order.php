@@ -26,6 +26,7 @@ use yii\helpers\Json;
  *
  * @property OrderItem[] $items
  * @property Status[] $statuses
+ * @property User $user
  */
 class Order extends ActiveRecord
 {
@@ -48,15 +49,15 @@ class Order extends ActiveRecord
 
     public function attributeLabels()
     {
-       return [
-           'created_at' => 'Дата створення',
-           'status' => 'Статус',
-           'current_status' => 'Поточний статус',
-           'delivery_method_name' => 'Тип доставки',
-           'deliveryData.index' => 'Поштовий індекс',
-           'deliveryData.address' => 'Адреса',
-           'cost' => 'Ціна',
-       ];
+        return [
+            'created_at' => 'Дата створення',
+            'status' => 'Статус',
+            'current_status' => 'Поточний статус',
+            'delivery_method_name' => 'Тип доставки',
+            'deliveryData.index' => 'Поштовий індекс',
+            'deliveryData.address' => 'Адреса',
+            'cost' => 'Ціна',
+        ];
     }
 
     public function edit(CustomerData $customerData, $note): void
@@ -73,12 +74,12 @@ class Order extends ActiveRecord
         $this->deliveryData = $deliveryData;
     }
 
-    public function pay($method): void
+    public function pay(): void
     {
         if ($this->isPaid()) {
             throw new \DomainException('Order is already paid.');
         }
-        $this->payment_method = $method;
+        $this->payment_method = 'cash';
         $this->addStatus(Status::PAID);
     }
 
@@ -90,6 +91,14 @@ class Order extends ActiveRecord
         $this->addStatus(Status::SENT);
     }
 
+    public function inProgress(): void
+    {
+        if ($this->isInProgress()) {
+            throw new \DomainException('Order is already in progress.');
+        }
+        $this->addStatus(Status::IN_PROGRESS);
+    }
+
     public function complete(): void
     {
         if ($this->isCompleted()) {
@@ -98,12 +107,12 @@ class Order extends ActiveRecord
         $this->addStatus(Status::COMPLETED);
     }
 
-    public function cancel($reason): void
+    public function cancel(): void
     {
         if ($this->isCancelled()) {
             throw new \DomainException('Order is already cancelled.');
         }
-        $this->cancel_reason = $reason;
+        $this->cancel_reason = '';
         $this->addStatus(Status::CANCELLED);
     }
 
@@ -132,6 +141,11 @@ class Order extends ActiveRecord
         return $this->current_status == Status::SENT;
     }
 
+    public function isInProgress(): bool
+    {
+        return $this->current_status == Status::IN_PROGRESS;
+    }
+
     public function isCompleted(): bool
     {
         return $this->current_status == Status::COMPLETED;
@@ -144,6 +158,7 @@ class Order extends ActiveRecord
 
     private function addStatus($value): void
     {
+        (new StatusWorkflow())->canChangeStatus($this->current_status, $value);
         $this->statuses[] = new Status($value, time());
         $this->current_status = $value;
     }
@@ -152,7 +167,7 @@ class Order extends ActiveRecord
 
     public function getUser(): ActiveQuery
     {
-        return $this->hasMany(User::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     public function getDeliveryMethod(): ActiveQuery
@@ -227,5 +242,10 @@ class Order extends ActiveRecord
         $this->setAttribute('delivery_address', $this->deliveryData->address);
 
         return parent::beforeSave($insert);
+    }
+
+    public function getUserName():string
+    {
+        return $this->user ? $this->user->username : '';
     }
 }

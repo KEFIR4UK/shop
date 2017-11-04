@@ -1,5 +1,6 @@
 <?php
 
+use shop\entities\Shop\Order\Order;
 use shop\helpers\OrderHelper;
 use shop\helpers\PriceHelper;
 use yii\helpers\Html;
@@ -37,7 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => OrderHelper::statusLabel($order->current_status),
                         'format' => 'raw',
                     ],
-                    'user_id',
+                    [
+                        'attribute' => 'user_id',
+                        'value' => function (Order $order) {
+                            if ($order->user_id) {
+                                return Html::a($order->getUserName(), ['user/view', 'id' => $order->user_id]);
+                            }
+                        },
+                        'format' => 'raw',
+                    ],
                     'delivery_method_name',
                     'deliveryData.index',
                     'deliveryData.address',
@@ -65,11 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php foreach ($order->items as $item): ?>
                         <tr>
                             <td class="text-left">
-                                <?= Html::encode($item->product_code) ?><br />
+                                <?= Html::encode($item->product_code) ?><br/>
                                 <?= Html::encode($item->product_name) ?>
                             </td>
                             <td class="text-left">
-                                <?= Html::encode($item->modification_code) ?><br />
+                                <?= Html::encode($item->modification_code) ?><br/>
                                 <?= Html::encode($item->modification_name) ?>
                             </td>
                             <td class="text-left">

@@ -2,8 +2,8 @@
 
 namespace backend\controllers\shop;
 
+use shop\entities\Shop\Order\StatusWorkflow;
 use shop\forms\manage\Shop\Order\OrderEditForm;
-use shop\forms\manage\Shop\OrderForm;
 use shop\useCases\manage\Shop\OrderManageService;
 use Yii;
 use shop\entities\Shop\Order\Order;
@@ -92,7 +92,7 @@ class OrderController extends Controller
     public function actionUpdate($id)
     {
         $order = $this->findModel($id);
-
+        $workflow = new StatusWorkflow();
         $form = new OrderEditForm($order);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
@@ -106,6 +106,8 @@ class OrderController extends Controller
         return $this->render('update', [
             'model' => $form,
             'order' => $order,
+            'statusLabels' => $workflow->getStatusLabels(),
+            'possibleTransitions' => $workflow->getPossibleTransitionList($order->current_status)
         ]);
     }
 

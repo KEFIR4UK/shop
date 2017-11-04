@@ -80,12 +80,12 @@ AppAsset::register($this);
             </div>
             <div class="col-sm-5">
                 <?= Html::beginForm(['/shop/catalog/search'], 'get') ?>
-                <div id="search" class="input-group">
-                    <input type="text" name="text" value="" placeholder="Пошук" class="form-control input-lg"/>
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default btn-lg"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
+<!--                <div id="search" class="input-group">-->
+<!--                    <input type="text" name="text" value="" placeholder="Пошук" class="form-control input-lg"/>-->
+<!--                    <span class="input-group-btn">-->
+<!--                        <button type="submit" class="btn btn-default btn-lg"><i class="fa fa-search"></i></button>-->
+<!--                    </span>-->
+<!--                </div>-->
                 <?= Html::endForm() ?>
             </div>
             <div class="col-sm-3">

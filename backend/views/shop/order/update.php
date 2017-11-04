@@ -3,6 +3,8 @@
 /* @var $this yii\web\View */
 /* @var $order shop\entities\Shop\Order\Order */
 /* @var $model shop\forms\manage\Shop\Order\OrderEditForm */
+/* @var $possibleTransitions [] */
+/* @var $statusLabels [] */
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
@@ -27,7 +29,8 @@ $this->params['breadcrumbs'][] = 'Update';
     <div class="box box-default">
         <div class="box-header with-border">Delivery</div>
         <div class="box-body">
-            <?= $form->field($model->delivery, 'method')->dropDownList($model->delivery->deliveryMethodsList(), ['prompt' => '--- Select ---']) ?>
+            <?= $form->field($model->delivery, 'method')->dropDownList($model->delivery->deliveryMethodsList(),
+                ['prompt' => '--- Select ---']) ?>
             <?= $form->field($model->delivery, 'index')->textInput() ?>
             <?= $form->field($model->delivery, 'address')->textarea(['rows' => 3]) ?>
         </div>
@@ -45,5 +48,19 @@ $this->params['breadcrumbs'][] = 'Update';
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <div class="box box-default">
+        <div class="box-header with-border">Change Statues</div>
+        <div class="box-body btn-group">
+            <?php
+            foreach ($possibleTransitions as $transition) {
+               echo Html::a($statusLabels[$transition],
+                    ['shop/order-status/change-status', 'orderId' => $order->id, 'statusId' => $transition],
+                    ['class' => 'btn btn-primary', 'role' => 'button']
+                );
+            }
+            ?>
+        </div>
+    </div>
 
 </div>
